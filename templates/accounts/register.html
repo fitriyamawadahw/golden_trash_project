@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Daftar | Golden Trash{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4" style="width: 100%; max-width: 400px;">
+        <h4 class="mb-3 text-center">Daftar Akun</h4>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password1" class="form-label">Password</label>
+                <input type="password" name="password1" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Konfirmasi Password</label>
+                <input type="password" name="password2" class="form-control" required>
+            </div>
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <button type="submit" class="btn btn-success w-100">Daftar</button>
+        </form>
+        <div class="text-center mt-3">
+            <p>Sudah punya akun? <a href="{% url 'accounts:login' %}">Login di sini</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,1044 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Content - Golden Trash{% endblock %}
+
+{% block extra_css %}
+<style>
+    .create-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .create-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .create-header h1 {
+        color: #2c5530;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .create-header p {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .create-form {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        border: 2px solid #e8f5e8;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #2c5530;
+        font-size: 14px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background-color: #fafafa;
+    }
+
+    .form-control:focus {
+        border-color: #4CAF50;
+        background-color: white;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .form-control.textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .file-input-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .file-input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .file-input-display {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border: 2px dashed #4CAF50;
+        border-radius: 8px;
+        background-color: #f8fff8;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .file-input-display:hover {
+        border-color: #45a049;
+        background-color: #f0fff0;
+    }
+
+    .file-input-display.drag-over {
+        border-color: #45a049;
+        background-color: #e8f5e8;
+        transform: scale(1.02);
+    }
+
+    .file-input-display i {
+        font-size: 24px;
+        color: #4CAF50;
+        margin-right: 15px;
+    }
+
+    .file-input-text {
+        color: #666;
+    }
+
+    /* Multiple File Preview Styles */
+    .files-preview {
+        margin-top: 15px;
+        display: none;
+    }
+
+    .files-preview.show {
+        display: block;
+    }
+
+    .files-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .file-preview-item {
+        position: relative;
+        background: #f8fff8;
+        border: 2px solid #4CAF50;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .file-preview-item img,
+    .file-preview-item video {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-bottom: 8px;
+    }
+
+    .file-preview-item .file-info {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .file-preview-item .file-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: #2c5530;
+        word-break: break-word;
+    }
+
+    .file-preview-item .remove-file {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #f44336;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .file-preview-item .remove-file:hover {
+        background: #d32f2f;
+        transform: scale(1.1);
+    }
+
+    .file-placeholder {
+        width: 100%;
+        height: 120px;
+        background: #e0e0e0;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+
+    .file-placeholder i {
+        font-size: 32px;
+        color: #999;
+    }
+
+    .files-counter {
+        margin-top: 10px;
+        padding: 8px 12px;
+        background: #e8f5e8;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #2c5530;
+        text-align: center;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .category-option {
+        position: relative;
+    }
+
+    .category-option input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .category-option label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #fafafa;
+        text-align: center;
+    }
+
+    .category-option label:hover {
+        border-color: #4CAF50;
+        background-color: #f8fff8;
+    }
+
+    .category-option input:checked + label {
+        border-color: #4CAF50;
+        background-color: #e8f5e8;
+        color: #2c5530;
+    }
+
+    .category-option i {
+        font-size: 24px;
+        margin-bottom: 8px;
+        color: #4CAF50;
+    }
+
+    /* Content Type Selection Styles */
+    .content-type-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .content-type-option {
+        position: relative;
+    }
+
+    .content-type-option input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .content-type-option label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #fafafa;
+        text-align: center;
+    }
+
+    .content-type-option label:hover {
+        border-color: #4CAF50;
+        background-color: #f8fff8;
+    }
+
+    .content-type-option input:checked + label {
+        border-color: #4CAF50;
+        background-color: #e8f5e8;
+        color: #2c5530;
+    }
+
+    .content-type-option i {
+        font-size: 24px;
+        margin-bottom: 8px;
+        color: #4CAF50;
+    }
+
+    .duration-options {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .duration-option {
+        position: relative;
+    }
+
+    .duration-option input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .duration-option label {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #fafafa;
+        font-size: 14px;
+    }
+
+    .duration-option label:hover {
+        border-color: #4CAF50;
+        background-color: #f8fff8;
+    }
+
+    .duration-option input:checked + label {
+        border-color: #4CAF50;
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .hashtag-input {
+        position: relative;
+    }
+
+    .hashtag-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        max-height: 150px;
+        overflow-y: auto;
+        z-index: 10;
+        display: none;
+    }
+
+    .hashtag-suggestion {
+        padding: 10px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .hashtag-suggestion:hover {
+        background-color: #f8fff8;
+    }
+
+    .hashtag-tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .hashtag-tag {
+        display: inline-flex;
+        align-items: center;
+        background-color: #e8f5e8;
+        color: #2c5530;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .hashtag-tag .remove-tag {
+        margin-left: 8px;
+        cursor: pointer;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .hashtag-tag .remove-tag:hover {
+        color: #d32f2f;
+    }
+
+    .submit-section {
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .alert {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: none;
+    }
+
+    .alert-success {
+        background-color: #e8f5e8;
+        color: #2c5530;
+        border-left: 4px solid #4CAF50;
+    }
+
+    .alert-error {
+        background-color: #fde8e8;
+        color: #d32f2f;
+        border-left: 4px solid #f44336;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .create-container {
+            padding: 15px;
+        }
+
+        .create-form {
+            padding: 20px;
+        }
+
+        .category-grid, .content-type-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .duration-options {
+            justify-content: center;
+        }
+
+        .files-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="create-container">
+    <div class="create-header">
+        <h1><i class="fas fa-plus-circle"></i> Create New Content</h1>
+        <p>Share your waste management creativity and inspire others!</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="create-form" id="createForm">
+        {% csrf_token %}
+
+        <!-- Content Type Selection -->
+        <div class="form-group">
+            <label>Content Type</label>
+            <div class="content-type-grid">
+                <div class="content-type-option">
+                    <input type="radio" id="content_type_image" name="content_type" value="image" required>
+                    <label for="content_type_image">
+                        <i class="fas fa-images"></i>
+                        <span>Images</span>
+                    </label>
+                </div>
+                <div class="content-type-option">
+                    <input type="radio" id="content_type_video" name="content_type" value="video" required>
+                    <label for="content_type_video">
+                        <i class="fas fa-video"></i>
+                        <span>Videos</span>
+                    </label>
+                </div>
+                <div class="content-type-option">
+                    <input type="radio" id="content_type_mixed" name="content_type" value="mixed" required>
+                    <label for="content_type_mixed">
+                        <i class="fas fa-photo-video"></i>
+                        <span>Mixed Media</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Multiple File Upload -->
+        <div class="form-group">
+            <label for="files">Upload Files</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="files" name="files" class="file-input" accept="image/*,video/*" multiple required>
+                <div class="file-input-display">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div class="file-input-text">
+                        <strong>Choose files</strong> or drag them here
+                        <br><small>Supported formats: JPG, PNG, MP4, AVI (Max 50MB each, 10 files max)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="files-preview" id="filesPreview">
+                <div class="files-counter" id="filesCounter">
+                    0 files selected
+                </div>
+                <div class="files-grid" id="filesGrid">
+                    <!-- File previews will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Caption -->
+        <div class="form-group">
+            <label for="caption">Caption</label>
+            <textarea name="caption" id="caption" class="form-control textarea" placeholder="Write an engaging caption for your content..." maxlength="500" required></textarea>
+            <small class="text-muted">0/500 characters</small>
+        </div>
+
+        <!-- Materials Used -->
+        <div class="form-group">
+            <label for="materials">Materials Used</label>
+            <textarea name="materials" id="materials" class="form-control textarea" placeholder="List the materials you used for this project..." maxlength="300"></textarea>
+            <small class="text-muted">0/300 characters</small>
+        </div>
+
+        <!-- Waste Category -->
+        <div class="form-group">
+            <label>Waste Category</label>
+            <div class="category-grid">
+                <div class="category-option">
+                    <input type="radio" id="category_organic" name="category" value="organic" required>
+                    <label for="category_organic">
+                        <i class="fas fa-leaf"></i>
+                        <span>Organic</span>
+                    </label>
+                </div>
+                <div class="category-option">
+                    <input type="radio" id="category_plastic" name="category" value="plastic" required>
+                    <label for="category_plastic">
+                        <i class="fas fa-bottle-water"></i>
+                        <span>Plastic</span>
+                    </label>
+                </div>
+                <div class="category-option">
+                    <input type="radio" id="category_paper" name="category" value="paper" required>
+                    <label for="category_paper">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Paper</span>
+                    </label>
+                </div>
+                <div class="category-option">
+                    <input type="radio" id="category_metal" name="category" value="metal" required>
+                    <label for="category_metal">
+                        <i class="fas fa-cog"></i>
+                        <span>Metal</span>
+                    </label>
+                </div>
+                <div class="category-option">
+                    <input type="radio" id="category_glass" name="category" value="glass" required>
+                    <label for="category_glass">
+                        <i class="fas fa-wine-glass"></i>
+                        <span>Glass</span>
+                    </label>
+                </div>
+                <div class="category-option">
+                    <input type="radio" id="category_mixed" name="category" value="mixed" required>
+                    <label for="category_mixed">
+                        <i class="fas fa-recycle"></i>
+                        <span>Mixed</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Duration -->
+        <div class="form-group">
+            <label>Project Duration</label>
+            <div class="duration-options">
+                <div class="duration-option">
+                    <input type="radio" id="duration_quick" name="duration_label" value="quick" required>
+                    <label for="duration_quick">Quick (< 1 hour)</label>
+                </div>
+                <div class="duration-option">
+                    <input type="radio" id="duration_medium" name="duration_label" value="medium" required>
+                    <label for="duration_medium">Medium (1-4 hours)</label>
+                </div>
+                <div class="duration-option">
+                    <input type="radio" id="duration_long" name="duration_label" value="long" required>
+                    <label for="duration_long">Long (> 4 hours)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hashtags -->
+        <div class="form-group">
+            <label for="hashtag_input">Hashtags</label>
+            <div class="hashtag-input">
+                <input type="text" id="hashtag_input" class="form-control" placeholder="Type hashtags (e.g., #recycle, #diy, #creative)">
+                <div class="hashtag-suggestions" id="hashtagSuggestions">
+                    <div class="hashtag-suggestion" data-tag="recycle">#recycle</div>
+                    <div class="hashtag-suggestion" data-tag="diy">#diy</div>
+                    <div class="hashtag-suggestion" data-tag="creative">#creative</div>
+                    <div class="hashtag-suggestion" data-tag="upcycle">#upcycle</div>
+                    <div class="hashtag-suggestion" data-tag="eco">#eco</div>
+                    <div class="hashtag-suggestion" data-tag="sustainable">#sustainable</div>
+                    <div class="hashtag-suggestion" data-tag="zerowaste">#zerowaste</div>
+                    <div class="hashtag-suggestion" data-tag="green">#green</div>
+                </div>
+            </div>
+            <div class="hashtag-tags" id="hashtagTags"></div>
+            <input type="hidden" name="hashtags" id="hashtags_hidden">
+        </div>
+
+        <!-- Waste Item -->
+        <div class="form-group">
+            <label for="waste_item">Related Waste Item (Optional)</label>
+            <input type="text" name="waste_item" id="waste_item" class="form-control" placeholder="Enter waste item name (e.g., Plastic Bottle, Cardboard Box)">
+            <small class="text-muted">Describe the main waste item used in your project</small>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+            <button type="submit" class="btn-submit" id="submitBtn">
+                <i class="fas fa-paper-plane"></i> Share Content
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let selectedFiles = [];
+    const maxFiles = 10;
+    const maxFileSize = 50 * 1024 * 1024; // 50MB
+
+    // Get DOM elements
+    const fileInput = document.getElementById('files');
+    const filesPreview = document.getElementById('filesPreview');
+    const filesGrid = document.getElementById('filesGrid');
+    const filesCounter = document.getElementById('filesCounter');
+    const fileDisplay = document.querySelector('.file-input-display');
+    const contentTypeRadios = document.querySelectorAll('input[name="content_type"]');
+
+    // Content type selection handling - allow mixed uploads
+    contentTypeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Always allow both image and video uploads
+            fileInput.accept = 'image/*,video/*';
+            
+            // Update file display text based on selection
+            const selectedType = this.value;
+            let acceptText = '';
+            
+            switch(selectedType) {
+                case 'image':
+                    acceptText = 'Supported formats: JPG, PNG, GIF, WebP (Max 50MB each, 10 files max)';
+                    break;
+                case 'video':
+                    acceptText = 'Supported formats: MP4, AVI, MOV, WebM (Max 50MB each, 10 files max)';
+                    break;
+                case 'mixed':
+                    acceptText = 'Supported formats: Images & Videos (Max 50MB each, 10 files max)';
+                    break;
+                default:
+                    acceptText = 'Supported formats: JPG, PNG, MP4, AVI (Max 50MB each, 10 files max)';
+            }
+            
+            if (selectedFiles.length === 0) {
+                fileDisplay.innerHTML = `
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div class="file-input-text">
+                        <strong>Choose files</strong> or drag them here
+                        <br><small>${acceptText}</small>
+                    </div>
+                `;
+            }
+        });
+    });
+
+    // File input handling
+    fileInput.addEventListener('change', function(e) {
+        handleFiles(Array.from(e.target.files));
+    });
+
+    function handleFiles(files) {
+        // Filter valid files and check limits
+        const validFiles = files.filter(file => {
+            if (file.size > maxFileSize) {
+                alert(`File "${file.name}" is too large. Maximum size is 50MB.`);
+                return false;
+            }
+            
+            // Accept both images and videos
+            if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+                alert(`File "${file.name}" is not a supported format.`);
+                return false;
+            }
+            
+            return true;
+        });
+
+        // Add files to selection (up to max limit)
+        const remainingSlots = maxFiles - selectedFiles.length;
+        const filesToAdd = validFiles.slice(0, remainingSlots);
+        
+        if (validFiles.length > remainingSlots) {
+            alert(`Only ${remainingSlots} more files can be added. Maximum is ${maxFiles} files.`);
+        }
+
+        selectedFiles = [...selectedFiles, ...filesToAdd];
+        updateFilePreview();
+    }
+
+    function updateFilePreview() {
+        if (selectedFiles.length === 0) {
+            filesPreview.classList.remove('show');
+            const selectedType = document.querySelector('input[name="content_type"]:checked')?.value || 'mixed';
+            let acceptText = 'Supported formats: JPG, PNG, MP4, AVI (Max 50MB each, 10 files max)';
+            
+            fileDisplay.innerHTML = `
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="file-input-text">
+                    <strong>Choose files</strong> or drag them here
+                    <br><small>${acceptText}</small>
+                </div>
+            `;
+            return;
+        }
+
+        filesPreview.classList.add('show');
+        filesCounter.textContent = `${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''} selected`;
+        
+        fileDisplay.innerHTML = `
+            <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+            <div class="file-input-text">
+                <strong>${selectedFiles.length} files selected</strong>
+                <br><small>Click to add more files (max ${maxFiles})</small>
+            </div>
+        `;
+
+        // Clear and rebuild grid
+        filesGrid.innerHTML = '';
+        
+        selectedFiles.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-preview-item';
+            
+            const fileURL = URL.createObjectURL(file);
+            const isVideo = file.type.startsWith('video/');
+            const fileSize = formatFileSize(file.size);
+            
+            fileItem.innerHTML = `
+                <button type="button" class="remove-file" onclick="removeFile(${index})">&times;</button>
+                ${isVideo ? 
+                    `<video src="${fileURL}" muted loop onmouseenter="this.play()" onmouseleave="this.pause(); this.currentTime=0;" preload="metadata"></video>` :
+                    `<img src="${fileURL}" alt="${file.name}" loading="lazy">`
+                }
+                <div class="file-info">${fileSize}</div>
+                <div class="file-name">${file.name}</div>
+            `;
+            
+            filesGrid.appendChild(fileItem);
+        });
+        
+        // Update the actual file input
+        updateFileInput();
+    }
+
+    function updateFileInput() {
+        // Create a new DataTransfer object to update the file input
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        updateFilePreview();
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Make removeFile globally accessible
+    window.removeFile = removeFile;
+
+    // Character count for textareas
+    const caption = document.getElementById('caption');
+    const materials = document.getElementById('materials');
+
+    function updateCharCount(textarea, maxLength) {
+        const currentLength = textarea.value.length;
+        const countElement = textarea.nextElementSibling;
+        countElement.textContent = `${currentLength}/${maxLength} characters`;
+        
+        if (currentLength > maxLength * 0.9) {
+            countElement.style.color = '#f44336';
+        } else {
+            countElement.style.color = '#666';
+        }
+    }
+
+    caption.addEventListener('input', () => updateCharCount(caption, 500));
+    materials.addEventListener('input', () => updateCharCount(materials, 300));
+
+    // Hashtag functionality
+    const hashtagInput = document.getElementById('hashtag_input');
+    const hashtagSuggestions = document.getElementById('hashtagSuggestions');
+    const hashtagTags = document.getElementById('hashtagTags');
+    const hashtagsHidden = document.getElementById('hashtags_hidden');
+    let selectedHashtags = [];
+
+    hashtagInput.addEventListener('input', function() {
+        const value = this.value.toLowerCase();
+        if (value.length > 0) {
+            hashtagSuggestions.style.display = 'block';
+            const suggestions = hashtagSuggestions.querySelectorAll('.hashtag-suggestion');
+            suggestions.forEach(suggestion => {
+                const tag = suggestion.dataset.tag;
+                if (tag.includes(value.replace('#', ''))) {
+                    suggestion.style.display = 'block';
+                } else {
+                    suggestion.style.display = 'none';
+                }
+            });
+        } else {
+            hashtagSuggestions.style.display = 'none';
+        }
+    });
+
+    hashtagInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            addHashtag(this.value);
+        }
+    });
+
+    hashtagSuggestions.addEventListener('click', function(e) {
+        if (e.target.classList.contains('hashtag-suggestion')) {
+            addHashtag('#' + e.target.dataset.tag);
+        }
+    });
+
+    function addHashtag(tag) {
+        tag = tag.trim();
+        if (!tag) return;
+        
+        // Ensure tag starts with #
+        if (!tag.startsWith('#')) {
+            tag = '#' + tag;
+        }
+        
+        // Check if hashtag already exists
+        if (selectedHashtags.includes(tag.toLowerCase())) {
+            hashtagInput.value = '';
+            hashtagSuggestions.style.display = 'none';
+            return;
+        }
+        
+        // Limit to 10 hashtags
+        if (selectedHashtags.length >= 10) {
+            alert('Maximum 10 hashtags allowed');
+            return;
+        }
+        
+        selectedHashtags.push(tag.toLowerCase());
+        updateHashtagDisplay();
+        hashtagInput.value = '';
+        hashtagSuggestions.style.display = 'none';
+    }
+
+    function updateHashtagDisplay() {
+        hashtagTags.innerHTML = '';
+        selectedHashtags.forEach((tag, index) => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'hashtag-tag';
+            tagElement.innerHTML = `
+                ${tag}
+                <span class="remove-tag" onclick="removeHashtag(${index})">&times;</span>
+            `;
+            hashtagTags.appendChild(tagElement);
+        });
+        
+        // Update hidden input
+        hashtagsHidden.value = selectedHashtags.join(',');
+    }
+
+    function removeHashtag(index) {
+        selectedHashtags.splice(index, 1);
+        updateHashtagDisplay();
+    }
+
+    // Make removeHashtag globally accessible
+    window.removeHashtag = removeHashtag;
+
+    // Click outside to hide hashtag suggestions
+    document.addEventListener('click', function(e) {
+        if (!hashtagInput.contains(e.target) && !hashtagSuggestions.contains(e.target)) {
+            hashtagSuggestions.style.display = 'none';
+        }
+    });
+
+    // Drag and drop functionality
+    fileDisplay.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+
+    fileDisplay.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+    });
+
+    fileDisplay.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        
+        const files = Array.from(e.dataTransfer.files);
+        handleFiles(files);
+    });
+
+    // Form submission handling
+    const form = document.getElementById('createForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Validate content type selection
+        const selectedContentType = document.querySelector('input[name="content_type"]:checked');
+        
+        if (!selectedContentType) {
+            alert('Please select a content type.');
+            return;
+        }
+        
+        // Validate files
+        if (selectedFiles.length === 0) {
+            alert('Please select at least one file.');
+            return;
+        }
+        
+        // Validate content type against selected files
+        const contentType = selectedContentType.value;
+        const hasImages = selectedFiles.some(file => file.type.startsWith('image/'));
+        const hasVideos = selectedFiles.some(file => file.type.startsWith('video/'));
+        
+        if (contentType === 'image' && hasVideos) {
+            alert('You selected "Images" but uploaded videos. Please select "Mixed Media" or remove video files.');
+            return;
+        }
+        
+        if (contentType === 'video' && hasImages) {
+            alert('You selected "Videos" but uploaded images. Please select "Mixed Media" or remove image files.');
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+        
+        // Create FormData for submission
+        const formData = new FormData(form);
+        
+        // Submit form via AJAX to handle redirect properly
+        fetch(form.action || window.location.pathname, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        })
+        .then(response => {
+        if (response.ok) {
+            window.location.href = "{% url 'create:upload_success' %}";
+        } else {
+            return response.text().then(text => {
+                throw new Error(text);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Upload error:', error);
+            alert('Upload failed. Please try again.');
+            
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Share Content';
+        });
+    });
+    
+    // Cleanup object URLs when page unloads
+    window.addEventListener('beforeunload', function() {
+        selectedFiles.forEach(file => {
+            if (file.objectURL) {
+                URL.revokeObjectURL(file.objectURL);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

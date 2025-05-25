@@ -1,0 +1,891 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile - Golden Trash{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-page {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        min-height: calc(100vh - 76px);
+        padding: 2rem 0;
+    }
+
+    .profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .profile-header {
+        background: var(--gradient-primary);
+        color: black;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--gradient-gold);
+        opacity: 0.1;
+    }
+
+    .profile-info {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    .profile-avatar {
+        position: relative;
+    }
+
+    .avatar-container {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid var(--primary-gold);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .avatar-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar-placeholder {
+        font-size: 4rem;
+        color: var(--text-light);
+    }
+
+    .profile-details h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        color: black;
+    }
+
+    .profile-username {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+        color: black;
+    }
+
+    .profile-bio {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        color: black;
+    }
+
+    .profile-stats {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        color: black;
+    }
+
+    .stat-number {
+        display: block;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-gold);
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        color: black;
+    }
+
+    .profile-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .btn-edit-profile {
+        background: var(--primary-gold);
+        color: var(--dark-green);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit-profile:hover {
+        background: var(--secondary-gold);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(255, 215, 0, 0.3);
+        color: var(--dark-green);
+    }
+
+    .profile-content {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+    }
+
+    .content-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark-green);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 12px;
+        border: 2px solid #f0f0f0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-gold);
+    }
+
+    .content-image {
+        width: 100%;
+        height: 200px;
+        background: var(--bg-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .content-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .content-image video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .content-image i {
+        font-size: 3rem;
+        color: var(--text-light);
+    }
+
+    .video-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .video-overlay i {
+        font-size: 3rem;
+        color: white;
+        opacity: 0.8;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .content-info {
+        padding: 1rem;
+    }
+
+    .content-title {
+        font-weight: 600;
+        color: var(--dark-green);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .content-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+
+    .content-category {
+        background: var(--primary-gold);
+        color: var(--dark-green);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .sidebar-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .sidebar-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--dark-green);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .achievement-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        background: var(--bg-green);
+        margin-bottom: 0.75rem;
+    }
+
+    .achievement-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-green);
+        font-size: 1.2rem;
+    }
+
+    .achievement-info h6 {
+        margin: 0;
+        font-weight: 600;
+        color: var(--dark-green);
+    }
+
+    .achievement-info small {
+        color: var(--text-light);
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        width: 35px;
+        height: 35px;
+        background: var(--light-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-content h6 {
+        margin: 0 0 0.25rem 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--dark-green);
+    }
+
+    .activity-content small {
+        color: var(--text-light);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--text-light);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .empty-state h5 {
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+
+    .empty-state p {
+        margin-bottom: 1.5rem;
+        color: var(--text-light);
+    }
+
+    .btn-create-content {
+        background: var(--gradient-gold);
+        color: var(--dark-green);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-create-content:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(255, 215, 0, 0.3);
+        color: var(--dark-green);
+    }
+
+    /* Debug info styling */
+    .debug-info {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    /* Modal Styles */
+    .modal-content {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .modal-header {
+        background: var(--gradient-primary);
+        color: white;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .modal-title {
+        font-weight: 600;
+        color: white;
+    }
+
+    .btn-close {
+        filter: invert(1);
+    }
+
+    /* Form styles */
+    .form-label {
+        color: var(--dark-green);
+        font-weight: 500;
+    }
+
+    .form-control {
+        color: var(--text-dark);
+    }
+
+    .text-muted {
+        color: var(--text-light) !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .profile-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .profile-info {
+            text-align: center;
+            flex-direction: column;
+        }
+        
+        .profile-actions {
+            margin-left: 0;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .profile-page {
+            padding: 1rem 0;
+        }
+        
+        .profile-header {
+            margin: 0 0 1.5rem 0;
+            padding: 1.5rem;
+        }
+        
+        .avatar-container {
+            width: 120px;
+            height: 120px;
+        }
+        
+        .profile-details h1 {
+            font-size: 2rem;
+        }
+        
+        .profile-stats {
+            justify-content: center;
+        }
+        
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-stats {
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            padding: 0.75rem 1rem;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <div class="avatar-container">
+                        {% if profile.profile_image %}
+                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.full_name|default:user.username }}">
+                        {% else %}
+                            <i class="fas fa-user avatar-placeholder"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="profile-details">
+                    <h1>{{ profile.full_name|default:user.username }}</h1>
+                    <p class="profile-username">@{{ user.username }}</p>
+                    {% if profile.bio %}
+                        <p class="profile-bio">{{ profile.bio }}</p>
+                    {% else %}
+                        <p class="profile-bio">Belum ada bio. Ceritakan tentang diri Anda!</p>
+                    {% endif %}
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ user_contents_count|default:0 }}</span>
+                            <span class="stat-label">Konten</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ total_comments|default:0 }}</span>
+                            <span class="stat-label">Komentar</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ days_joined|default:0 }}</span>
+                            <span class="stat-label">Hari Bergabung</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <button class="btn btn-edit-profile" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-content">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- My Contents -->
+                <div class="content-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-images"></i>
+                        Konten Saya
+                    </h3>
+                    
+                    {% if user_contents %}
+                        <div class="content-grid">
+                            {% for content in user_contents %}
+                            <div class="content-card" onclick="viewContent({{ content.id }})">
+                                <!-- Debug info untuk troubleshooting -->
+                                {% comment %}
+                                <div class="debug-info">
+                                    Debug: Type={{ content.content_type }}, File={{ content.file_path }}
+                                </div>
+                                {% endcomment %}
+                                
+                                <div class="content-image">
+                                    {% if content.file_path %}
+                                        {% if content.content_type == 'image' %}
+                                            <img src="{{ content.file_path.url }}" 
+                                                 alt="{{ content.caption|truncatechars:50|default:'Image' }}"
+                                                 onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fas fa-image-slash\' style=\'font-size: 3rem; color: #ccc;\'></i><div style=\'position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: #999;\'>Gambar tidak dapat dimuat</div>';">
+                                        {% elif content.content_type == 'video' %}
+                                            <video preload="metadata" 
+                                                   onloadstart="console.log('Video loading started')"
+                                                   onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fas fa-video-slash\' style=\'font-size: 3rem; color: #ccc;\'></i><div style=\'position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: #999;\'>Video tidak dapat dimuat</div>';">
+                                                <source src="{{ content.file_path.url }}" type="video/mp4">
+                                                <source src="{{ content.file_path.url }}" type="video/webm">
+                                                <source src="{{ content.file_path.url }}" type="video/avi">
+                                                <source src="{{ content.file_path.url }}" type="video/mov">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                            <div class="video-overlay">
+                                                <i class="fas fa-play-circle"></i>
+                                            </div>
+                                        {% else %}
+                                            <!-- For other content types -->
+                                            <i class="fas fa-file" style="font-size: 3rem; color: var(--text-light);"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fas fa-image" style="font-size: 3rem; color: var(--text-light);"></i>
+                                        <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: #999;">
+                                            Tidak ada file
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="content-info">
+                                    <h6 class="content-title">{{ content.caption|truncatechars:60|default:"Tanpa Caption" }}</h6>
+                                    <div class="content-meta">
+                                        <span class="content-category">{{ content.get_category_display|default:"Umum" }}</span>
+                                        <small>{{ content.created_at|date:"d M Y" }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-camera"></i>
+                            <h5>Belum Ada Konten</h5>
+                            <p>Mulai berbagi kreativitas Anda dengan membuat konten pertama!</p>
+                            <a href="{% url 'create:create_content' %}" class="btn-create-content">
+                                <i class="fas fa-plus"></i>Buat Konten
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <!-- Achievements -->
+                <div class="sidebar-section">
+                    <h4 class="sidebar-title">
+                        <i class="fas fa-trophy"></i>
+                        Pencapaian
+                    </h4>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <h6>Eco Warrior</h6>
+                            <small>Bergabung dengan Golden Trash</small>
+                        </div>
+                    </div>
+                    
+                    {% if user_contents_count >= 1 %}
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <h6>First Creator</h6>
+                            <small>Membuat konten pertama</small>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if user_contents_count >= 5 %}
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <h6>Content Creator</h6>
+                            <small>Membuat 5+ konten</small>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if days_joined >= 30 %}
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <h6>Loyal Member</h6>
+                            <small>Aktif selama 30+ hari</small>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="sidebar-section">
+                    <h4 class="sidebar-title">
+                        <i class="fas fa-clock"></i>
+                        Aktivitas Terbaru
+                    </h4>
+                    
+                    {% if recent_activities %}
+                        {% for activity in recent_activities %}
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                {% if activity.type == 'content' %}
+                                    <i class="fas fa-plus"></i>
+                                {% elif activity.type == 'comment' %}
+                                    <i class="fas fa-comment"></i>
+                                {% else %}
+                                    <i class="fas fa-circle"></i>
+                                {% endif %}
+                            </div>
+                            <div class="activity-content">
+                                <h6>{{ activity.description }}</h6>
+                                <small>{{ activity.created_at|timesince }} yang lalu</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-history" style="font-size: 2rem; color: var(--text-light); opacity: 0.5;"></i>
+                            <p class="mt-2 mb-0 text-muted">Belum ada aktivitas</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-edit me-2"></i>Edit Profile
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" id="editProfileForm">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <!-- Profile Image -->
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="avatar-container mx-auto mb-3" style="width: 120px; height: 120px;">
+                                {% if profile.profile_image %}
+                                    <img src="{{ profile.profile_image.url }}" alt="Profile" id="profilePreview">
+                                {% else %}
+                                    <i class="fas fa-user avatar-placeholder" id="profilePreview"></i>
+                                {% endif %}
+                            </div>
+                            <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*" onchange="previewImage(this)">
+                            <small class="text-muted">Format: JPG, PNG (Max: 2MB)</small>
+                        </div>
+                        
+                        <!-- Profile Details -->
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="full_name" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="full_name" name="full_name" 
+                                       value="{{ profile.full_name|default:'' }}" placeholder="Masukkan nama lengkap">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       value="{{ user.username }}" placeholder="Masukkan username">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       value="{{ user.email }}" placeholder="Masukkan email">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="bio" class="form-label">Bio</label>
+                                <textarea class="form-control" id="bio" name="bio" rows="4" 
+                                          placeholder="Ceritakan tentang diri Anda...">{{ profile.bio|default:'' }}</textarea>
+                                <small class="text-muted">Maksimal 500 karakter</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Preview uploaded image
+    function previewImage(input) {
+        const preview = document.getElementById('profilePreview');
+        const file = input.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                } else {
+                    // Replace icon with image
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.id = 'profilePreview';
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    preview.parentNode.replaceChild(img, preview);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // View content function
+    function viewContent(contentId) {
+        // Implement content viewing logic
+        window.location.href = `/explore/#content-${contentId}`;
+    }
+
+    // Handle form submission
+    document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const submitBtn = this.querySelector('button[type="submit"]');
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
+        
+        // Simulate form submission (replace with actual AJAX call)
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Success
+                bootstrap.Modal.getInstance(document.getElementById('editProfileModal')).hide();
+                location.reload();
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menyimpan profile');
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Simpan Perubahan';
+        });
+    });
+
+    // Character counter for bio
+    document.getElementById('bio').addEventListener('input', function() {
+        const maxLength = 500;
+        const currentLength = this.value.length;
+        const remaining = maxLength - currentLength;
+        
+        // Find or create counter element
+        let counter = this.parentNode.querySelector('.char-counter');
+        if (!counter) {
+            counter = document.createElement('small');
+            counter.className = 'char-counter text-muted';
+            this.parentNode.appendChild(counter);
+        }
+        
+        counter.textContent = `${remaining} karakter tersisa`;
+        
+if (remaining < 0) {
+            counter.classList.add('text-danger');
+            counter.classList.remove('text-muted');
+        } else {
+            counter.classList.remove('text-danger');
+            counter.classList.add('text-muted');
+        }
+    });
+</script>
+{% endblock %}

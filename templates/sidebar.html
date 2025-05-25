@@ -1,0 +1,349 @@
+{% load static %}
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <img src="{% static 'images/logo.jpg' %}" alt="Golden Trash" class="logo-img">
+            <span class="logo-text">Golden Trash</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="{% url 'home:index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">Home</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{% url 'explore:explore' %}" class="nav-link {% if request.resolver_match.url_name == 'explore' %}active{% endif %}">
+                    <i class="fas fa-compass"></i>
+                    <span class="nav-text">Explore</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{% url 'create:create_content' %}" class="nav-link {% if request.resolver_match.url_name == 'create_content' %}active{% endif %}">
+                    <i class="fas fa-plus-circle"></i>
+                    <span class="nav-text">Create</span>
+                </a>
+            </li>
+            
+            <!-- Notification Menu Item -->
+            <li class="nav-item">
+                <a href="{% url 'notifications:notification_list' %}" class="nav-link {% if request.resolver_match.url_name == 'notification_list' or request.resolver_match.url_name == 'notifications' %}active{% endif %}">
+                    <i class="fas fa-bell"></i>
+                    <span class="nav-text">Notifications</span>
+                    {% if unread_notifications_count > 0 %}
+                        <span class="notification-badge">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{% url 'profile:profile' %}" class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                    <i class="fas fa-user"></i>
+                    <span class="nav-text">Profile</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="sidebar-footer">
+        <div class="user-info">
+            {% if user.profile.profile_image %}
+                <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="user-avatar">
+            {% else %}
+                <div class="user-avatar-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+            {% endif %}
+            <div class="user-details">
+                <span class="username">{{ user.username }}</span>
+                <span class="user-email">{{ user.email }}</span>
+            </div>
+        </div>
+        
+        <div class="logout-section">
+            <a href="{% url 'accounts:logout' %}" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-text">Logout</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay for mobile -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<style>
+/* Sidebar Container */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.logo-text {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #ecf0f1;
+}
+
+.sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+/* Navigation */
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 0;
+}
+
+.nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    margin-bottom: 4px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #bdc3c7;
+    transition: all 0.2s ease;
+    position: relative;
+    border-left: 3px solid transparent;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ecf0f1;
+    border-left-color: #3498db;
+    text-decoration: none;
+}
+
+.nav-link.active {
+    background-color: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border-left-color: #3498db;
+}
+
+.nav-link i {
+    font-size: 1.1em;
+    width: 20px;
+    margin-right: 12px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.nav-text {
+    flex: 1;
+    font-size: 0.95em;
+    font-weight: 500;
+    text-align: left;
+}
+
+/* Notification Badge */
+.notification-badge {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.75em;
+    font-weight: 600;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+}
+
+/* Footer */
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #7f8c8d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2em;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.username {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #ecf0f1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-email {
+    display: block;
+    font-size: 0.8em;
+    color: #95a5a6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Logout Section */
+.logout-section {
+    margin-top: 10px;
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #e74c3c;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    margin: 0 -8px;
+}
+
+.logout-link:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #c0392b;
+    text-decoration: none;
+}
+
+.logout-link i {
+    font-size: 1.1em;
+    width: 20px;
+    margin-right: 12px;
+    text-align: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .sidebar-toggle {
+        display: block;
+    }
+    
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+</style>
