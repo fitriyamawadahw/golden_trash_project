@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Trash - Waste Management System</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Plastik">
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-compass"></i>
+                <span>Explore</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-plus"></i>
+                <span>Create</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search" id="searchInput">
+                </div>
+                <button class="filter-btn" id="filterBtn">
+                    <i class="fas fa-filter"></i>
+                    <span>Filter</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="tab-btn" data-category="organic">Organic</button>
+            <button class="tab-btn active" data-category="non-organic">Non-Organic</button>
+        </div>
+
+        <!-- Items Grid -->
+        <div class="items-grid">
+            <!-- Plastik -->
+            <div class="item-card" data-category="non-organic" data-name="plastik">
+                <div class="item-icon">
+                    <img src="{% static 'images/plastik.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Plastik</div>
+            </div>
+
+            <!-- Kertas -->
+            <div class="item-card" data-category="non-organic" data-name="kertas">
+                <div class="item-icon">
+                    <img src="{% static 'images/kertas.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Kertas</div>
+            </div>
+
+            <!-- Logam -->
+            <div class="item-card" data-category="non-organic" data-name="logam">
+                <div class="item-icon">
+                    <img src="{% static 'images/logam.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Logam</div>
+            </div>
+
+            <!-- Kaca -->
+            <div class="item-card" data-category="non-organic" data-name="kaca">
+                <div class="item-icon">
+                    <img src="{% static 'images/kaca.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Kaca</div>
+            </div>
+
+            <!-- Kain -->
+            <div class="item-card" data-category="non-organic" data-name="kain">
+                <div class="item-icon">
+                    <img src="{% static 'images/kain.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Kain</div>
+            </div>
+
+            <!-- Karet -->
+            <div class="item-card" data-category="non-organic" data-name="karet">
+                <div class="item-icon">
+                    <img src="{% static 'images/karet.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Karet</div>
+            </div>
+
+            <!-- Elektronik -->
+            <div class="item-card" data-category="non-organic" data-name="elektronik">
+                <div class="item-icon">
+                    <img src="{% static 'images/elektronik.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Elektronik</div>
+            </div>
+
+            <!-- Styrofoam -->
+            <div class="item-card" data-category="non-organic" data-name="styrofoam">
+                <div class="item-icon">
+                    <img src="{% static 'images/sterofoam.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Styrofoam</div>
+            </div>
+
+            <!-- Mainan -->
+            <div class="item-card" data-category="non-organic" data-name="mainan">
+                <div class="item-icon">
+                    <img src="{% static 'images/mainan.png' %}" alt="Plastik">
+                </div>
+                <div class="item-name">Mainan</div>
+            </div>
+
+            <!-- Organic Items (hidden by default) -->
+            <div class="item-card" data-category="organic" data-name="daun" style="display: none;">
+                <div class="item-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="item-name">Daun</div>
+            </div>
+
+            <div class="item-card" data-category="organic" data-name="sisa makanan" style="display: none;">
+                <div class="item-icon">
+                    <i class="fas fa-apple-alt"></i>
+                </div>
+                <div class="item-name">Sisa Makanan</div>
+            </div>
+
+            <div class="item-card" data-category="organic" data-name="kulit buah" style="display: none;">
+                <div class="item-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <div class="item-name">Kulit Buah</div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <i class="fas fa-search"></i>
+            <h3>Tidak ada hasil ditemukan</h3>
+            <p>Coba ubah kata kunci pencarian atau kategori</p>
+        </div>
+    </div>
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" id="overlay"></div>
+
+    <script src="{% static 'js/home.js' %}"></script>
+</body>
+</html>

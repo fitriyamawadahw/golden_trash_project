@@ -1,0 +1,478 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 900px;
+    min-height: 600px;
+}
+
+/* Left Side */
+.left-side {
+    flex: 1;
+    background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.logo-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.illustration {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Character - Ganti dengan gambar */
+.character {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.character-image {
+    width: 280px;
+    height: 350px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+}
+
+/* Fallback jika gambar tidak ada - CSS character */
+.character-fallback {
+    display: none; /* Akan ditampilkan jika gambar gagal load */
+}
+
+.character-head {
+    width: 80px;
+    height: 80px;
+    background: #FF6B6B;
+    border-radius: 50%;
+    position: relative;
+    margin: 0 auto;
+}
+
+.character-head::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 40px;
+    background: #8B4513;
+    border-radius: 30px 30px 0 0;
+    top: -20px;
+    left: 10px;
+}
+
+.character-body {
+    width: 100px;
+    height: 120px;
+    background: #FF6B6B;
+    border-radius: 50px 50px 20px 20px;
+    margin: 5px auto;
+    position: relative;
+}
+
+.character-arms {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 30px;
+}
+
+.character-arms::before,
+.character-arms::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    background: #FF6B6B;
+    border-radius: 10px;
+}
+
+.character-arms::before {
+    left: -10px;
+    transform: rotate(-30deg);
+}
+
+.character-arms::after {
+    right: -10px;
+    transform: rotate(30deg);
+}
+
+/* Trash Elements */
+.trash-elements {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.trash-item {
+    position: absolute;
+    border-radius: 5px;
+}
+
+.trash-1 {
+    width: 30px;
+    height: 40px;
+    background: #FFE66D;
+    top: 50px;
+    left: 20px;
+    transform: rotate(-15deg);
+}
+
+.trash-2 {
+    width: 25px;
+    height: 35px;
+    background: #FF6B6B;
+    top: 100px;
+    right: 30px;
+    transform: rotate(20deg);
+}
+
+.trash-3 {
+    width: 35px;
+    height: 25px;
+    background: #4ECDC4;
+    bottom: 80px;
+    left: 40px;
+    transform: rotate(-10deg);
+}
+
+/* Decorative Elements */
+.decorative-elements {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.dot {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.dot-1 {
+    width: 8px;
+    height: 8px;
+    top: 30px;
+    right: 50px;
+}
+
+.dot-2 {
+    width: 12px;
+    height: 12px;
+    bottom: 40px;
+    right: 80px;
+}
+
+.dot-3 {
+    width: 6px;
+    height: 6px;
+    top: 80px;
+    left: 60px;
+}
+
+.triangle {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.triangle-1 {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 12px solid rgba(255, 255, 255, 0.3);
+    top: 60px;
+    right: 20px;
+}
+
+.triangle-2 {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid rgba(255, 255, 255, 0.3);
+    bottom: 120px;
+    left: 80px;
+}
+
+/* Right Side */
+.right-side {
+    flex: 1;
+    padding: 60px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 350px;
+}
+
+.login-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.login-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #66BB6A;
+    box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.1);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #666;
+}
+
+.checkbox-container input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 3px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.checkbox-container input[type="checkbox"]:checked + .checkmark {
+    background: #66BB6A;
+    border-color: #66BB6A;
+}
+
+.checkbox-container input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.forgot-password {
+    color: #66BB6A;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.forgot-password:hover {
+    color: #4CAF50;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 20px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 187, 106, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    background: #FFE6E6;
+    color: #D63031;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #FFB3B3;
+}
+
+.signup-link {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.signup-link a {
+    color: #66BB6A;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.signup-link a:hover {
+    color: #4CAF50;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        width: 95%;
+        max-width: 450px;
+    }
+    
+    .left-side {
+        min-height: 250px;
+        padding: 30px;
+    }
+    
+    .illustration {
+        height: 200px;
+    }
+    
+    .character-image {
+        width: 180px;
+        height: 220px;
+    }
+    
+    .logo {
+        font-size: 22px;
+        gap: 10px;
+    }
+    
+    .logo-img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logo-text {
+        font-size: 22px;
+    }
+    
+    .right-side {
+        padding: 40px 30px;
+    }
+    
+    .login-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+}
+
+.login-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+    position: relative;
+}
+
+.login-btn.loading::after {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+.alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
