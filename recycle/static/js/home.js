@@ -209,41 +209,41 @@ function createFilterModal() {
     return modal;
 }
 
-// Handle navigation
+// Handle navigation - HANYA ANIMASI KLIK, KECUALI LOGOUT
 function handleNavigation(e) {
     e.preventDefault();
     const navItem = e.currentTarget;
     const navText = navItem.querySelector('span').textContent;
     
-    // Remove active class from all nav items
+    // Add click animation to nav item
+    navItem.style.transform = 'scale(0.95)';
+    navItem.style.transition = 'transform 0.15s ease';
+    
+    setTimeout(() => {
+        navItem.style.transform = 'scale(1)';
+    }, 150);
+    
+    // Reset transition after animation
+    setTimeout(() => {
+        navItem.style.transition = '';
+    }, 300);
+    
+    // Handle logout - TETAP BERFUNGSI
+    if (navText === 'Logout') {
+        handleLogout();
+        return; // Exit early, don't change active states for logout
+    }
+    
+    // Remove active class from all nav items (except logout)
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
     });
     
-    // Add active class to clicked item
+    // Add active class to clicked item (except logout)
     navItem.classList.add('active');
     
-    // Handle different navigation options
-    switch(navText) {
-        case 'Home':
-            // Already on home
-            break;
-        case 'Explore':
-            showNotification('Fitur Explore akan segera hadir!');
-            break;
-        case 'Create':
-            showNotification('Fitur Create akan segera hadir!');
-            break;
-        case 'Notifications':
-            showNotification('Tidak ada notifikasi baru');
-            break;
-        case 'Profile':
-            showNotification('Fitur Profile akan segera hadir!');
-            break;
-        case 'Logout':
-            handleLogout();
-            break;
-    }
+    // TIDAK ADA NAVIGASI UNTUK ITEM LAIN - hanya animasi klik dan perubahan active state
+    // Halaman sudah siap tapi belum diintegrasikan
     
     // Close mobile menu if open
     if (window.innerWidth <= 768) {
@@ -436,6 +436,27 @@ const additionalStyles = `
     /* Click animation */
     .item-card:active {
         transform: scale(0.95);
+    }
+    
+    /* Navigation items hover and click effects */
+    .nav-item {
+        cursor: pointer;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    
+    .nav-item:hover {
+        background-color: rgba(243, 156, 18, 0.1);
+        transform: translateX(5px);
+    }
+    
+    .nav-item:active {
+        transform: scale(0.95);
+    }
+    
+    /* Active nav item styling */
+    .nav-item.active {
+        background-color: rgba(85, 228, 14, 0.2);
+        border-right: 3px solidrgb(121, 204, 4);
     }
 `;
 

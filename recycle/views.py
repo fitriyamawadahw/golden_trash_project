@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import logout
 
 def login_view(request):
     if request.method == 'POST':
@@ -80,6 +81,7 @@ class CustomLoginView(LoginView):
         return super().form_invalid(form)
     
 def logout_view(request):
-    logout(request)
-    messages.success(request, 'Logout berhasil!')
-    return redirect('login') 
+    if request.method == 'POST':
+        logout(request)
+        return redirect('/login/')
+    return redirect('/') 
