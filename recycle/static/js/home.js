@@ -445,7 +445,7 @@ const additionalStyles = `
     }
     
     .nav-item:hover {
-        background-color: rgba(243, 156, 18, 0.1);
+        background-color: rgba(85, 228, 14, 0.2);
         transform: translateX(5px);
     }
     
