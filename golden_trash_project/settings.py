@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from decouple import config
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default=')t=24xkxj62*1$_!ck4z9$4qnqhivmevpd5j#5*1)#nijd4u70')
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
     'apps.explore',
     'apps.profile',
     'apps.notifications',
+    'apps.katalog',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +62,7 @@ WSGI_APPLICATION = 'golden_trash_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'goldentrashdb',
+        'NAME': 'golden_trash_db',
         'USER': config('DB_USER', default='root'),
         'PASSWORD': config('DB_PASSWORD', default=''),
         'HOST': config('DB_HOST', default='127.0.0.1'),
