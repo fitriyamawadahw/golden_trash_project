@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product.title }}</title>
+    <style>
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .spec {
+            margin-top: 20px;
+        }
+        .spec h3 {
+            margin-bottom: 5px;
+        }
+        .likes {
+            margin-top: 15px;
+        }
+        .comments {
+            margin-top: 30px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .comment-box {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 6px;
+        }
+        form textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+        }
+        form button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #00695c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ product.title }}</h1>
+        <img src="{{ product.image.url }}" alt="{{ product.title }}">
+        
+        <div class="spec">
+            <h3>Kategori:</h3>
+            <p>{{ product.category|capfirst }}</p>
+
+            <h3>Subkategori:</h3>
+            <p>{{ product.subcategory|capfirst }}</p>
+
+            <h3>Tipe Produk:</h3>
+            <p>{{ product.product_type }}</p>
+
+            <h3>Tingkat Kesulitan:</h3>
+            <p>{{ product.difficulty }}</p>
+
+            <h3>Bahan-bahan:</h3>
+            <p>{{ product.materials }}</p>
+
+            <h3>Cara Pembuatan:</h3>
+            <p>{{ product.cara_pembuatan }}</p>
+        </div>
+
+        <!-- Likes -->
+        <div class="likes">
+            <strong>Likes:</strong> <span id="like-count">{{ product.likes }}</span>
+            <button onclick="likeProduct({{ product.id }})">👍 Like</button>
+        </div>
+
+        <!-- Comments -->
+        <div class="comments">
+            <h3>Komentar</h3>
+
+            {% for comment in comments %}
+                <div class="comment-box">
+                    <p>{{ comment.content }}</p>
+                    <small>{{ comment.created_at }}</small>
+                </div>
+            {% empty %}
+                <p>Belum ada komentar.</p>
+            {% endfor %}
+
+            <form method="post">
+                {% csrf_token %}
+                <textarea name="comment" placeholder="Tulis komentar di sini..."></textarea>
+                <button type="submit">Kirim</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function likeProduct(productId) {
+            fetch(`/katalog/produk/${productId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('like-count').innerText = data.likes;
+            });
+        }
+    </script>
+</body>
+</html>

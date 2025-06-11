@@ -1,0 +1,337 @@
+/* Additional CSS for home.css - Filter panel and interactions */
+
+/* Filter Panel Styles */
+.filters-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.filters-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.filters-panel {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background: white;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.filters-panel.active {
+    right: 0;
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.filters-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.close-filters {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.close-filters:hover {
+    color: #e74c3c;
+}
+
+.filter-group {
+    margin-bottom: 25px;
+}
+
+.filter-group h4 {
+    margin: 0 0 15px 0;
+    color: #34495e;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-option input[type="radio"],
+.filter-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #3498db;
+}
+
+.filter-option label {
+    cursor: pointer;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    user-select: none;
+}
+
+.filter-option label:hover {
+    color: #3498db;
+}
+
+/* Tab buttons active state */
+.tab-btn.active {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.tab-btn.active i {
+    color: white;
+}
+
+/* Item card hover effects */
+.item-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* List view styles */
+.items-grid.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.items-grid.list-view .item-card {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.items-grid.list-view .item-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+
+.items-grid.list-view .item-name {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.items-grid.list-view .item-description {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.items-grid.list-view .item-badge {
+    position: static;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+/* Quick action buttons */
+.quick-action-btn {
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.quick-action-btn:hover {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+}
+
+.quick-actions {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+/* Search input focus styles */
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    border-color: #3498db;
+}
+
+/* Filter button */
+.filter-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-btn:hover {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+/* No results message */
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.no-results i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.no-results h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+}
+
+.no-results p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .filters-panel {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .quick-actions {
+        justify-content: center;
+    }
+    
+    .quick-action-btn {
+        font-size: 0.8rem;
+        padding: 10px 15px;
+    }
+    
+    .items-grid.list-view .item-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .items-grid.list-view .item-icon {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/* Loading animation for items */
+.item-card {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Badge styles */
+.item-badge {
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.item-badge.popular {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.item-badge.new {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+.item-badge:not(.popular):not(.new) {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.filter-tag {
+    display: inline-block;
+    margin: 5px 8px 0 0;
+    padding: 7px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #eaeaea;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tag:hover {
+    background-color: #dcdcdc;
+}
+
+.filter-tag.active {
+    border: 2px solid #007bff;
+    background-color: #cce5ff;
+}
