@@ -1,7 +1,6 @@
-Django
+Django>=4.2
 gunicorn
 python-decouple
 dj-database-url
-psycopg[binary]
-crispy-bootstrap5
+psycopg2-binary
 Pillow
