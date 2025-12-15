@@ -2,12 +2,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import redirect
+
+def root_redirect(request):
+    return redirect('accounts:login')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.home.urls')),           # home
-    path('katalog/', include('apps.katalog.urls')),    # ✅ ini yang penting!
+
+    # ROOT → LOGIN
+    path('', root_redirect, name='root'),
+
     path('accounts/', include('apps.accounts.urls')),
+    path('home/', include('apps.home.urls')),
+    path('katalog/', include('apps.katalog.urls')),
     path('create/', include('apps.create.urls')),
     path('explore/', include('apps.explore.urls')),
     path('profile/', include('apps.profile.urls')),

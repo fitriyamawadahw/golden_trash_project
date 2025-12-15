@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# ⬇️ Taruh semua pilihan di atas class Product
+# ⬇ Taruh semua pilihan di atas class Product
 CATEGORY_CHOICES = [
     ('organik', 'Organik'),
     ('anorganik', 'Anorganik'),
@@ -24,10 +24,10 @@ DIFFICULTY_CHOICES = [
     ('sulit', 'Sulit (>1 hari)'),
 ]
 
-# ⬇️ Baru class-nya
+# ⬇ Baru class-nya
 class Product(models.Model):
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='product_images/')  # <== PENTING
+    image = models.FileField(upload_to='product_media/')  # <== PENTING
     subcategory = models.CharField(max_length=50)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     cara_pembuatan = models.TextField()
@@ -36,7 +36,7 @@ class Product(models.Model):
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES)
     likes = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class Comment(models.Model):

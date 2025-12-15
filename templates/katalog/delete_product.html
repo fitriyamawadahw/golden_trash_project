@@ -1,0 +1,7 @@
+<h1>Hapus Produk</h1>
+<p>Apakah kamu yakin ingin menghapus produk "{{ product.title }}"?</p>
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Ya, Hapus</button>
+  <a href="{% url 'katalog:product_detail' product.pk %}">Batal</a>
+</form>

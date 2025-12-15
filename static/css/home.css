@@ -332,6 +332,8 @@
 }
 
 .filter-tag.active {
-    border: 2px solid #007bff;
-    background-color: #cce5ff;
+  border: 2px solid #007bff;
+  background-color: #dbefff;
+  color: #000;
 }
+

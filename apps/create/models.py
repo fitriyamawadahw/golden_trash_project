@@ -1,39 +1,43 @@
-# apps/create/models.py
-from django.db import models
-from django.contrib.auth.models import User
-from apps.home.models import Waste
+# apps/katalog/models.py
 
-class CreateContent(models.Model):
-    CONTENT_TYPE_CHOICES = [
-        ('image', 'Image'),
-        ('video', 'Video'),
-    ]
-    
-    DURATION_CHOICES = [
-        ('<=1hari', '≤ 1 hari'),
-        ('1hari', '1 hari'),
-        ('>=1hari', '≥ 1 hari'),
-    ]
-    
+from django.db import models
+
+class Product(models.Model):
     CATEGORY_CHOICES = [
         ('Organik', 'Organik'),
         ('Anorganik', 'Anorganik'),
     ]
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    waste = models.ForeignKey(Waste, on_delete=models.SET_NULL, null=True, blank=True)
-    content_type = models.CharField(max_length=10, choices=CONTENT_TYPE_CHOICES)
-    file_path = models.FileField(upload_to='content_files/')
-    caption = models.TextField(blank=True, null=True)
-    materials = models.TextField(blank=True, null=True)
-    duration_label = models.CharField(max_length=10, choices=DURATION_CHOICES)
-    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
-    hashtags = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        db_table = 'create_content'
-        
-    def __str__(self):
-        return f"{self.user.username} - {self.content_type}"
+
+    SUBCATEGORY_CHOICES = [
+        ('Plastik', 'Plastik'),
+        ('Kertas', 'Kertas'),
+        ('Logam', 'Logam'),
+        ('Kaca', 'Kaca'),
+        ('Kain', 'Kain'),
+        ('Karet', 'Karet'),
+        ('Elektronik', 'Elektronik'),
+        ('Styrofoam', 'Styrofoam'),
+        ('Mainan', 'Mainan'),
+        ('Daun', 'Daun'),
+        ('Sisa Makanan', 'Sisa Makanan'),
+        ('Kulit Buah', 'Kulit Buah'),
+        ('Sayur Busuk', 'Sayur Busuk'),
+        ('Sekam Padi', 'Sekam Padi'),
+        ('Ranting Kayu', 'Ranting Kayu'),
+        ('Ampas Teh', 'Ampas Teh'),
+        ('Ampas Kopi', 'Ampas Kopi'),
+        ('Kulit Telur', 'Kulit Telur'),
+        ('Kertas Tisu', 'Kertas Tisu'),
+        ('Tulang Ikan', 'Tulang Ikan'),
+        ('Bunga Layu', 'Bunga Layu'),
+    ]
+
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='products/')
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    subcategory = models.CharField(max_length=50, choices=SUBCATEGORY_CHOICES)
+    materials = models.TextField()
+    product_type = models.CharField(max_length=100)
+    difficulty = models.CharField(max_length=20)
+    cara_pembuatan = models.TextField()
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)

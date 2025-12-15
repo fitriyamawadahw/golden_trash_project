@@ -15,7 +15,7 @@
         <form method="get" action="{% url 'home:index' %}">
             <div class="search-input-wrapper">
                  <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" name="search" placeholder="Cari jenis sampah..." value="{{ keyword }}">
+                <input type="text" class="search-input" name="search" placeholder="Cari jenis sampah..." value="{{ keyword|default:'' }}">
             </div>
         </form>
         {% if keyword %}
@@ -73,10 +73,10 @@
     <i class="fas fa-times"></i>
     <span>Reset Pencarian</span>
     </a>
-    <button class="quick-action-btn" onclick="toggleView()">
+    <!-- <button class="quick-action-btn" onclick="toggleView()">
         <i class="fas fa-th"></i>
         <span>Ubah Tampilan</span>
-    </button>
+    </button> -->
 </div>
 
 <!-- Category Tabs -->
@@ -93,18 +93,22 @@
         <i class="fas fa-leaf"></i>
         <span>Organik</span>
     </button>
-    <button class="tab-btn" data-category="hazardous">
+    <!-- <button class="tab-btn" data-category="hazardous">
         <i class="fas fa-exclamation-triangle"></i>
         <span>B3</span>
-    </button>
+    </button> -->
 </div>
 
 <!-- Hasil Pencarian Produk -->
 {% if products %}
 <h2>Hasil Pencarian</h2>
-<div class="items-grid">
+<div class="items-grid" id="itemsGrid">
   {% for product in products %}
-  <div class="item-card">
+  <div class="item-card"
+       data-category="{{ product.category|lower }}"
+       data-material="{{ product.subcategory|lower }}"
+       data-difficulty="{{ product.difficulty|lower }}"
+       data-name="{{ product.title|lower }}">
     <div class="item-icon">
       <img src="{{ product.image.url }}" alt="{{ product.title }}">
     </div>
@@ -148,7 +152,7 @@
     </div>
 </a>
 
-
+<a href="/katalog/kertas/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="kertas">
         <div class="item-icon">
             <img src="{% static 'images/kertas.png' %}" alt="Kertas" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -157,7 +161,9 @@
         <div class="item-name">Kertas</div>
         <div class="item-description">Kertas bekas, koran, majalah</div>
     </div>
+</a>
 
+<a href="/katalog/logam/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="logam">
         <div class="item-icon">
             <img src="{% static 'images/logam.png' %}" alt="Logam" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -166,7 +172,9 @@
         <div class="item-name">Logam</div>
         <div class="item-description">Kaleng, besi, aluminium</div>
     </div>
+</a>
 
+<a href="/katalog/kaca/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="kaca">
         <div class="item-icon">
             <img src="{% static 'images/kaca.png' %}" alt="Kaca" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -175,7 +183,9 @@
         <div class="item-name">Kaca</div>
         <div class="item-description">Botol kaca, pecahan kaca</div>
     </div>
+</a>
 
+<a href="/katalog/kain/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="kain">
         <div class="item-icon">
             <img src="{% static 'images/kain.png' %}" alt="Kain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -184,7 +194,9 @@
         <div class="item-name">Kain</div>
         <div class="item-description">Pakaian bekas, kain perca</div>
     </div>
+</a>
 
+<a href="/katalog/karet/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="karet">
         <div class="item-icon">
             <img src="{% static 'images/karet.png' %}" alt="Karet" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -193,7 +205,9 @@
         <div class="item-name">Karet</div>
         <div class="item-description">Ban bekas, sarung tangan karet</div>
     </div>
+</a>
 
+<a href="/katalog/elektronik/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="elektronik">
         <div class="item-icon">
             <img src="{% static 'images/elektronik.png' %}" alt="Elektronik" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -202,7 +216,9 @@
         <div class="item-name">Elektronik</div>
         <div class="item-description">HP bekas, komponen elektronik</div>
     </div>
+</a>
 
+<a href="/katalog/styrofoam/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="styrofoam">
         <div class="item-icon">
             <img src="{% static 'images/styrofoam.png' %}" alt="Styrofoam" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -211,7 +227,9 @@
         <div class="item-name">Styrofoam</div>
         <div class="item-description">Kemasan makanan, kotak styrofoam</div>
     </div>
+</a>
 
+<a href="/katalog/mainan/" style="text-decoration: none; color: inherit;">
     <div class="item-card" data-category="non-organic" data-name="mainan">
         <div class="item-icon">
             <img src="{% static 'images/mainan.png' %}" alt="Mainan" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -220,133 +238,156 @@
         <div class="item-name">Mainan</div>
         <div class="item-description">Mainan bekas, puzzle, lego</div>
     </div>
+</a>
+
     {% endfor %}
 
-    <!-- Organic Items -->
-    {% for waste in organic_wastes %}
-    <div class="item-card" data-category="organic" data-name="{{ waste.name|lower }}">
-        {% if waste.is_new %}
-        <div class="item-badge new">Baru</div>
-        {% endif %}
-        <div class="item-icon">
-            <img src="{% static 'images/'|add:waste.name|lower|add:'.png' %}" alt="{{ waste.name }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-leaf" style="display:none; font-size: 2rem; color: #27ae60;"></i>
-        </div>
-        <div class="item-name">{{ waste.name }}</div>
-        <div class="item-description">{{ waste.description|truncatewords:10 }}</div>
+   <!-- Organic Items -->
+<a href="/katalog/daun/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="daun">
+    <div class="item-icon">
+      <img src="{% static 'images/daun.png' %}" alt="Daun"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-leaf" style="display:none; font-size: 2rem; color: #2ecc71;"></i>
     </div>
-    {% empty %}
-    <!-- Default Organic Items if no data in database -->
-    <div class="item-card" data-category="organic" data-name="daun">
-        <div class="item-icon">
-            <img src="{% static 'images/daun.png' %}" alt="Daun" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-leaf" style="display:none; font-size: 2rem; color: #27ae60;"></i>
-        </div>
-        <div class="item-name">Daun</div>
-        <div class="item-description">Daun kering, daun gugur, daun tanaman</div>
-    </div>
+    <div class="item-name">Daun</div>
+    <div class="item-description">Daun-daun kering</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="sisa makanan">
-        <div class="item-icon">
-            <img src="{% static 'images/sisa_makanan.png' %}" alt="Sisa Makanan" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-apple-alt" style="display:none; font-size: 2rem; color: #e74c3c;"></i>
-        </div>
-        <div class="item-name">Sisa Makanan</div>
-        <div class="item-description">Nasi, sayur, lauk pauk sisa</div>
+<a href="/katalog/sisa-makanan/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="sisa makanan">
+    <div class="item-icon">
+      <img src="{% static 'images/sisa_makanan.png' %}" alt="Sisa Makanan"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-utensils" style="display:none; font-size: 2rem; color: #d35400;"></i>
     </div>
+    <div class="item-name">Sisa Makanan</div>
+    <div class="item-description">Nasi, lauk, sisa makanan lainnya</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="kulit buah">
-        <div class="item-icon">
-            <img src="{% static 'images/kulit_buah.png' %}" alt="Kulit Buah" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-seedling" style="display:none; font-size: 2rem; color: #f39c12;"></i>
-        </div>
-        <div class="item-name">Kulit Buah</div>
-        <div class="item-description">Kulit pisang, jeruk, apel, mangga</div>
+<a href="/katalog/kulit-buah/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="kulit buah">
+    <div class="item-icon">
+      <img src="{% static 'images/kulit_buah.png' %}" alt="Kulit Buah"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-apple-alt" style="display:none; font-size: 2rem; color: #e67e22;"></i>
     </div>
+    <div class="item-name">Kulit Buah</div>
+    <div class="item-description">Kulit apel, jeruk, dll.</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="sayuran busuk">
-        <div class="item-icon">
-            <img src="{% static 'images/sayuran_busuk.png' %}" alt="Sayuran Busuk" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-carrot" style="display:none; font-size: 2rem; color: #e67e22;"></i>
-        </div>
-        <div class="item-name">Sayuran Busuk</div>
-        <div class="item-description">Sayur layu, busuk, tidak layak konsumsi</div>
+<a href="/katalog/sayuran-busuk/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="sayuran busuk">
+    <div class="item-icon">
+      <img src="{% static 'images/sayuran_busuk.png' %}" alt="Sayuran Busuk"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-seedling" style="display:none; font-size: 2rem; color: #27ae60;"></i>
     </div>
+    <div class="item-name">Sayuran Busuk</div>
+    <div class="item-description">Sisa sayur busuk</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="ranting kayu">
-        <div class="item-icon">
-            <img src="{% static 'images/ranting_kayu.png' %}" alt="Ranting Kayu" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-tree" style="display:none; font-size: 2rem; color: #8B4513;"></i>
-        </div>
-        <div class="item-name">Ranting Kayu</div>
-        <div class="item-description">Ranting pohon, kayu kecil, potongan bambu</div>
+<a href="/katalog/ranting-kayu/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="ranting kayu">
+    <div class="item-icon">
+      <img src="{% static 'images/ranting_kayu.png' %}" alt="Ranting Kayu"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-tree" style="display:none; font-size: 2rem; color: #8e44ad;"></i>
     </div>
+    <div class="item-name">Ranting Kayu</div>
+    <div class="item-description">Ranting atau batang kecil</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="sekam padi">
-        <div class="item-icon">
-            <img src="{% static 'images/sekam_padi.png' %}" alt="Sekam Padi" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-wheat" style="display:none; font-size: 2rem; color: #D2691E;"></i>
-        </div>
-        <div class="item-name">Sekam Padi</div>
-        <div class="item-description">Kulit gabah, sekam hasil penggilingan</div>
+<a href="/katalog/sekam-padi/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="sekam padi">
+    <div class="item-icon">
+      <img src="{% static 'images/sekam_padi.png' %}" alt="Sekam Padi"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-tractor" style="display:none; font-size: 2rem; color: #c0392b;"></i>
     </div>
+    <div class="item-name">Sekam Padi</div>
+    <div class="item-description">Limbah panen padi</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="ampas teh">
-        <div class="item-icon">
-            <img src="{% static 'images/ampas_teh.png' %}" alt="Ampas Teh" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-mug-hot" style="display:none; font-size: 2rem; color: #654321;"></i>
-        </div>
-        <div class="item-name">Ampas Teh</div>
-        <div class="item-description">Ampas teh celup, daun teh bekas</div>
+<a href="/katalog/ampas-teh/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="ampas teh">
+    <div class="item-icon">
+      <img src="{% static 'images/ampas_teh.png' %}" alt="Ampas Teh"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-mug-hot" style="display:none; font-size: 2rem; color: #7f8c8d;"></i>
     </div>
+    <div class="item-name">Ampas Teh</div>
+    <div class="item-description">Sisa seduhan teh</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="ampas kopi">
-        <div class="item-icon">
-            <img src="{% static 'images/ampas_kopi.png' %}" alt="Ampas Kopi" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-coffee" style="display:none; font-size: 2rem; color: #8B4513;"></i>
-        </div>
-        <div class="item-name">Ampas Kopi</div>
-        <div class="item-description">Bubuk kopi bekas, ampas kopi tubruk</div>
+<a href="/katalog/ampas-kopi/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="ampas kopi">
+    <div class="item-icon">
+      <img src="{% static 'images/ampas_kopi.png' %}" alt="Ampas Kopi"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-coffee" style="display:none; font-size: 2rem; color: #6f4e37;"></i>
     </div>
+    <div class="item-name">Ampas Kopi</div>
+    <div class="item-description">Sisa kopi bubuk</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="kulit telur">
-        <div class="item-icon">
-            <img src="{% static 'images/kulit_telur.png' %}" alt="Kulit Telur" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-egg" style="display:none; font-size: 2rem; color: #F5F5DC;"></i>
-        </div>
-        <div class="item-name">Kulit Telur</div>
-        <div class="item-description">Cangkang telur ayam, bebek, puyuh</div>
+<a href="/katalog/kulit-telur/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="kulit telur">
+    <div class="item-icon">
+      <img src="{% static 'images/kulit_telur.png' %}" alt="Kulit Telur"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-egg" style="display:none; font-size: 2rem; color: #f1c40f;"></i>
     </div>
+    <div class="item-name">Kulit Telur</div>
+    <div class="item-description">Cangkang telur</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="kertas tisu">
-        <div class="item-icon">
-            <img src="{% static 'images/kertas_tisu.png' %}" alt="Kertas Tisu" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-tissue" style="display:none; font-size: 2rem; color: #F0F8FF;"></i>
-        </div>
-        <div class="item-name">Kertas Tisu</div>
-        <div class="item-description">Tisu bekas, serbet kertas</div>
+<a href="/katalog/kertas-tisu/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="kertas tisu">
+    <div class="item-icon">
+      <img src="{% static 'images/kertas_tisu.png' %}" alt="Kertas Tisu"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-toilet-paper" style="display:none; font-size: 2rem; color: #bdc3c7;"></i>
     </div>
+    <div class="item-name">Kertas Tisu</div>
+    <div class="item-description">Tisu bekas</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="tulang ikan">
-        <div class="item-icon">
-            <img src="{% static 'images/tulang_ikan.png' %}" alt="Tulang Ikan" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-fish" style="display:none; font-size: 2rem; color: #4682B4;"></i>
-        </div>
-        <div class="item-name">Tulang Ikan</div>
-        <div class="item-description">Tulang ikan, duri ikan, kepala ikan</div>
+<a href="/katalog/bunga-layu/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="bunga layu">
+    <div class="item-icon">
+      <img src="{% static 'images/bunga_layu.png' %}" alt="Bunga Layu"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-spa" style="display:none; font-size: 2rem; color: #e84393;"></i>
     </div>
+    <div class="item-name">Bunga Layu</div>
+    <div class="item-description">Bunga kering/busuk</div>
+  </div>
+</a>
 
-    <div class="item-card" data-category="organic" data-name="bunga layu">
-        <div class="item-icon">
-            <img src="{% static 'images/bunga_layu.png' %}" alt="Bunga Layu" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fas fa-flower" style="display:none; font-size: 2rem; color: #FF69B4;"></i>
-        </div>
-        <div class="item-name">Bunga Layu</div>
-        <div class="item-description">Bunga potong layu, kelopak bunga</div>
+<a href="/katalog/tulang-ikan/" style="text-decoration: none; color: inherit;">
+  <div class="item-card" data-category="organic" data-name="tulang ikan">
+    <div class="item-icon">
+      <img src="{% static 'images/tulang_ikan.png' %}" alt="Tulang Ikan"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <i class="fas fa-fish" style="display:none; font-size: 2rem; color: #3498db;"></i>
     </div>
-    {% endfor %}
+    <div class="item-name">Tulang Ikan</div>
+    <div class="item-description">Sisa tulang ikan</div>
+  </div>
+</a>
 
-    <!-- Hazardous Waste Items -->
+    <!-- Hazardous Waste Items
     <div class="item-card" data-category="hazardous" data-name="baterai">
         <div class="item-badge">B3</div>
         <div class="item-icon">
@@ -386,7 +427,7 @@
         <div class="item-name">Cat & Thinner</div>
         <div class="item-description">Kaleng cat bekas, thinner, pelarut</div>
     </div>
-</div>
+</div> -->
 
 <!-- No Results Message -->
 <div class="no-results" id="noResults" style="display: none;">
@@ -398,7 +439,7 @@
 <!-- Statistics Section -->
 <div class="stats-section">
     <div class="stats-grid">
-        <div class="stat-card">
+        <!-- <div class="stat-card">
             <div class="stat-icon">
                 <i class="fas fa-recycle"></i>
             </div>
@@ -433,15 +474,15 @@
                 <h3>{{ non_organic_count|default:0 }}</h3>
                 <p>Sampah Non-Organik</p>
             </div>
-        </div>
-        <div class="stat-card">
+        </div> -->
+        <!-- <div class="stat-card">
             <div class="stat-icon">
                 <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <div class="stat-content">
+            </div> -->
+            <!-- <div class="stat-content">
                 <h3>{{ hazardous_count|default:0 }}</h3>
                 <p>Limbah B3</p>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -471,10 +512,10 @@
                 <input type="radio" id="filter-non-organic" name="category" value="non-organic">
                 <label for="filter-non-organic">Non-Organik</label>
             </div>
-            <div class="filter-option">
+            <!-- <div class="filter-option">
                 <input type="radio" id="filter-hazardous" name="category" value="hazardous">
                 <label for="filter-hazardous">Limbah B3</label>
-            </div>
+            </div> -->
         </div>
     </div>
     
@@ -494,9 +535,8 @@
 {% block extra_js %}
 <script src="{% static 'js/home.js' %}"></script>
 <script>
-// Ensure organic items are visible by default
+// Tampilkan semua item secara default saat halaman dimuat
 document.addEventListener('DOMContentLoaded', function() {
-    // Show all items by default
     showAllItems();
 });
 
@@ -505,14 +545,15 @@ function showAllItems() {
     items.forEach(item => {
         item.style.display = 'block';
     });
-    
-    // Update active tab
+
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelector('[data-category="all"]').classList.add('active');
-    
+    const allTab = document.querySelector('[data-category="all"]');
+    if (allTab) allTab.classList.add('active');
+
     checkNoResults();
 }
 
+// Toggle filter panel
 document.addEventListener('DOMContentLoaded', function() {
     const filterBtn = document.getElementById('filterBtn');
     const filterPanel = document.getElementById('filterPanel');
@@ -524,27 +565,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('searchInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        const keyword = this.value.toLowerCase();
-        const items = document.querySelectorAll('.item-card');
-        let hasResult = false;
+// Pencarian berdasarkan nama
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const keyword = this.value.toLowerCase();
+            const items = document.querySelectorAll('.item-card');
+            let hasResult = false;
 
-        items.forEach(item => {
-            const name = item.dataset.name;
-            if (name.includes(keyword)) {
-                item.style.display = 'block';
-                hasResult = true;
-            } else {
-                item.style.display = 'none';
-            }
-        });
+            items.forEach(item => {
+                const name = item.dataset.name;
+                if (name.includes(keyword)) {
+                    item.style.display = 'block';
+                    hasResult = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
 
-        document.getElementById('filterBtn').classList.remove('hidden');
-        checkNoResults();
-    }
-});
+            const filterBtn = document.getElementById('filterBtn');
+            if (filterBtn) filterBtn.classList.remove('hidden');
+            checkNoResults();
+        }
+    });
+}
 
+// Event click filter-tag
 document.querySelectorAll('.filter-tag').forEach(tag => {
     tag.addEventListener('click', function () {
         tag.classList.toggle('active');
@@ -552,6 +599,7 @@ document.querySelectorAll('.filter-tag').forEach(tag => {
     });
 });
 
+// Fungsi utama filter berdasarkan data attribute
 function filterItems() {
     const activeFilters = document.querySelectorAll('.filter-tag.active');
     const items = document.querySelectorAll('.item-card');
@@ -565,24 +613,31 @@ function filterItems() {
 
     activeFilters.forEach(tag => {
         const type = tag.dataset.filterType;
-        const value = tag.dataset.value;
-        filterValues[type].push(value);
+        const value = tag.dataset.value.toLowerCase();
+        if (filterValues[type]) {
+            filterValues[type].push(value);
+        }
     });
 
     items.forEach(item => {
+        const itemCategory = item.dataset.category?.toLowerCase() || '';
+        const itemMaterial = item.dataset.material?.toLowerCase() || '';
+        const itemDurasi = item.dataset.durasi?.toLowerCase() || '';
+        const itemDifficulty = item.dataset.difficulty?.toLowerCase() || '';
+
         let visible = true;
 
-        if (filterValues.category.length > 0) {
-            visible = visible && filterValues.category.includes(item.dataset.category);
+        if (filterValues.category.length > 0 && !filterValues.category.includes(itemCategory)) {
+            visible = false;
         }
-        if (filterValues.material.length > 0) {
-            visible = visible && filterValues.material.includes(item.dataset.material);
+        if (filterValues.material.length > 0 && !filterValues.material.includes(itemMaterial)) {
+            visible = false;
         }
-        if (filterValues.durasi.length > 0) {
-            visible = visible && filterValues.durasi.includes(item.dataset.durasi);
+        if (filterValues.durasi.length > 0 && !filterValues.durasi.includes(itemDurasi)) {
+            visible = false;
         }
-        if (filterValues.difficulty.length > 0) {
-            visible = visible && filterValues.difficulty.includes(item.dataset.difficulty);
+        if (filterValues.difficulty.length > 0 && !filterValues.difficulty.includes(itemDifficulty)) {
+            visible = false;
         }
 
         item.style.display = visible ? 'block' : 'none';
@@ -591,19 +646,19 @@ function filterItems() {
     checkNoResults();
 }
 
+// Toggle tampilan grid/list
 function toggleView() {
     const grid = document.getElementById('itemsGrid');
     grid.classList.toggle('list-view');
 }
 
+// Cek jika tidak ada hasil yang terlihat
 function checkNoResults() {
-    const visibleItems = document.querySelectorAll('.item-card[style*="block"], .item-card:not([style*="none"])');
+    const visibleItems = document.querySelectorAll('.item-card[style*="block"]');
     const noResults = document.getElementById('noResults');
-    
-    if (visibleItems.length === 0) {
-        noResults.style.display = 'block';
-    } else {
-        noResults.style.display = 'none';
+
+    if (noResults) {
+        noResults.style.display = visibleItems.length === 0 ? 'block' : 'none';
     }
 }
 </script>

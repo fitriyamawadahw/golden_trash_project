@@ -1,30 +1,29 @@
 # apps/create/forms.py
 from django import forms
-from .models import CreateContent
-from apps.home.models import Waste
+from apps.katalog.models import Product
 
-class CreateContentForm(forms.ModelForm):
+# apps/create/forms.py
+
+class ProductUploadForm(forms.ModelForm):
     class Meta:
-        model = CreateContent
-        fields = ['waste', 'content_type', 'file_path', 'caption', 'materials', 
-                 'duration_label', 'category', 'hashtags']
+        model = Product
+        fields = [
+            'title',
+            'image',
+            'category',
+            'subcategory',
+            'materials',
+            'product_type',
+            'difficulty',
+            'cara_pembuatan',
+        ]
         widgets = {
-            'content_type': forms.Select(attrs={'class': 'form-control'}),
-            'file_path': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*,video/*'}),
-            'caption': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'accept': 'image/,video/'}),
+            'category': forms.Select(attrs={'class': 'form-control', 'id': 'id_category'}),
+            'subcategory': forms.Select(attrs={'class': 'form-control', 'id': 'id_subcategory'}),
             'materials': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'duration_label': forms.Select(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
-            'hashtags': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '#contoh #hashtag'}),
-            'waste': forms.Select(attrs={'class': 'form-control'}),
-        }
-        labels = {
-            'waste': 'Jenis Sampah',
-            'content_type': 'Tipe Konten',
-            'file_path': 'Upload File',
-            'caption': 'Caption',
-            'materials': 'Bahan-bahan',
-            'duration_label': 'Durasi Pengerjaan',
-            'category': 'Kategori',
-            'hashtags': 'Hashtags',
+            'product_type': forms.TextInput(attrs={'class': 'form-control'}),
+            'difficulty': forms.Select(choices=[('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard')], attrs={'class': 'form-control'}),
+            'cara_pembuatan': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }

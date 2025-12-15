@@ -45,7 +45,7 @@
             </li>
             
             <li class="nav-item">
-                <a href="{% url 'profile:profile' %}" class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                <a href="{% url 'profile:profile_view' %}" class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
                     <i class="fas fa-user"></i>
                     <span class="nav-text">Profile</span>
                 </a>
@@ -55,7 +55,7 @@
     
     <div class="sidebar-footer">
         <div class="user-info">
-            {% if user.profile.profile_image %}
+            {% if user.profile_image %}
                 <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="user-avatar">
             {% else %}
                 <div class="user-avatar-placeholder">

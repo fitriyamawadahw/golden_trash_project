@@ -72,6 +72,14 @@
 
             <h3>Cara Pembuatan:</h3>
             <p>{{ product.cara_pembuatan }}</p>
+
+            <!-- Tambahkan tombol ini di bawah detail produk -->
+<a href="{% url 'katalog:edit_product' product.pk %}">✏️ Edit</a>
+<form action="{% url 'katalog:delete_product' product.pk %}" method="POST" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" onclick="return confirm('Yakin mau hapus produk ini?')">🗑️ Delete</button>
+</form>
+
         </div>
 
         <!-- Likes -->
