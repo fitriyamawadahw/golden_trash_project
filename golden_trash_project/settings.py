@@ -1,35 +1,31 @@
 import os
 from pathlib import Path
-
 from decouple import config
 import dj_database_url
 
-
-# ==============================
+# ==================================================
 # BASE DIR
-# ==============================
+# ==================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# ==============================
+# ==================================================
 # SECURITY
-# ==============================
+# ==================================================
 SECRET_KEY = config(
     'SECRET_KEY',
     default=')t=24xkxj62*1$_!ck4z9$4qnqhivmevpd5j#5*1)#nijd4u70'
 )
 
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1'
-).split(',')
+# Railway BUTUH ini
+ALLOWED_HOSTS = ['*']
 
 
-# ==============================
+# ==================================================
 # APPLICATIONS
-# ==============================
+# ==================================================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,9 +49,9 @@ INSTALLED_APPS = [
 ]
 
 
-# ==============================
+# ==================================================
 # MIDDLEWARE
-# ==============================
+# ==================================================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -67,9 +63,9 @@ MIDDLEWARE = [
 ]
 
 
-# ==============================
+# ==================================================
 # URL & TEMPLATE
-# ==============================
+# ==================================================
 ROOT_URLCONF = 'golden_trash_project.urls'
 
 TEMPLATES = [
@@ -91,29 +87,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'golden_trash_project.wsgi.application'
 
 
-# ==============================
-# DATABASE
-# ==============================
+# ==================================================
+# DATABASE (RAILWAY POSTGRES – FINAL)
+# ==================================================
 DATABASES = {
     'default': dj_database_url.config(
-        # PostgreSQL (Railway) → otomatis pakai DATABASE_URL
-        # MySQL (XAMPP) → fallback kalau DATABASE_URL tidak ada
-        default=(
-            f"mysql://{config('DB_USER', 'root')}:"
-            f"{config('DB_PASSWORD', '')}@"
-            f"{config('DB_HOST', '127.0.0.1')}:"
-            f"{config('DB_PORT', '3306')}/"
-            f"{config('DB_NAME', 'golden_trash_db')}"
-        ),
+        default=config('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=False,
+        ssl_require=True,
     )
 }
 
 
-# ==============================
+# ==================================================
 # PASSWORD VALIDATION
-# ==============================
+# ==================================================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -122,42 +110,41 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# ==============================
+# ==================================================
 # INTERNATIONALIZATION
-# ==============================
+# ==================================================
 LANGUAGE_CODE = 'id'
 TIME_ZONE = 'Asia/Jakarta'
 USE_I18N = True
 USE_TZ = True
 
 
-# ==============================
-# STATIC & MEDIA
-# ==============================
+# ==================================================
+# STATIC FILES
+# ==================================================
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-# ==============================
-# DEFAULT FIELD
-# ==============================
+# ==================================================
+# DEFAULT PRIMARY KEY
+# ==================================================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# ==============================
+# ==================================================
 # CRISPY FORMS
-# ==============================
+# ==================================================
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
-# ==============================
+# ==================================================
 # AUTH REDIRECTS
-# ==============================
+# ==================================================
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'home:index'
 LOGOUT_REDIRECT_URL = 'accounts:login'
