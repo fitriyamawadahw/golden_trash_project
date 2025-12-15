@@ -1,36 +1,34 @@
 import os
 from pathlib import Path
-
-from decouple import config
+from decouple import config, Csv
 import dj_database_url
-
 
 # ==============================
 # BASE DIR
 # ==============================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # ==============================
 # SECURITY
 # ==============================
 SECRET_KEY = config(
     'SECRET_KEY',
-    default=')t=24xkxj62*1$_!ck4z9$4qnqhivmevpd5j#5*1)#nijd4u70'
+    default='super-secret-key-change-this-in-production'
 )
 
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1'
-).split(',')
-
+    default='goldentrashproject-production.up.railway.app',
+    cast=Csv()
+)
 
 # ==============================
 # APPLICATIONS
 # ==============================
 INSTALLED_APPS = [
+    # Django default
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,12 +50,12 @@ INSTALLED_APPS = [
     'apps.katalog',
 ]
 
-
 # ==============================
 # MIDDLEWARE
 # ==============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Wajib untuk static files production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,7 +63,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 
 # ==============================
 # URL & TEMPLATE
@@ -90,26 +87,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'golden_trash_project.wsgi.application'
 
-
 # ==============================
 # DATABASE
 # ==============================
 DATABASES = {
     'default': dj_database_url.config(
-        # PostgreSQL (Railway) → otomatis pakai DATABASE_URL
-        # MySQL (XAMPP) → fallback kalau DATABASE_URL tidak ada
-        default=(
-            f"mysql://{config('DB_USER', 'root')}:"
-            f"{config('DB_PASSWORD', '')}@"
-            f"{config('DB_HOST', '127.0.0.1')}:"
-            f"{config('DB_PORT', '3306')}/"
-            f"{config('DB_NAME', 'golden_trash_db')}"
-        ),
+        default='postgresql://postgres:vbaATQHcChWcDAWAFcMppGKRwMdSlpVn@postgres-kgsb.railway.internal:5432/railway',
         conn_max_age=600,
-        ssl_require=False,
+        ssl_require=True,
     )
 }
-
 
 # ==============================
 # PASSWORD VALIDATION
@@ -121,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # ==============================
 # INTERNATIONALIZATION
 # ==============================
@@ -130,23 +116,23 @@ TIME_ZONE = 'Asia/Jakarta'
 USE_I18N = True
 USE_TZ = True
 
-
 # ==============================
 # STATIC & MEDIA
 # ==============================
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # optional dev
+
+# WhiteNoise optimizations
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
 
 # ==============================
 # DEFAULT FIELD
 # ==============================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 # ==============================
 # CRISPY FORMS
@@ -154,10 +140,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-
 # ==============================
 # AUTH REDIRECTS
 # ==============================
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'home:index'
 LOGOUT_REDIRECT_URL = 'accounts:login'
+
+# ==============================
+# SECURITY BEST PRACTICES PRODUCTION
+# ==============================
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# ==============================
+# RAILWAY / GUNICORN PORT
+# ==============================
+# Railway otomatis set PORT, Gunicorn pakai $PORT
+PORT = int(os.environ.get("PORT", 8000))
