@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ==============================
 SECRET_KEY = config(
     'SECRET_KEY',
-    default='super-secret-key-change-this-in-production'
+    default=')t=24xkxj62*1$_!ck4z9$4qnqhivmevpd5j#5*1)#nijd4u70'
 )
 
 DEBUG = config('DEBUG', default=False, cast=bool)
