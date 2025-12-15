@@ -4,3 +4,4 @@ python-decouple
 dj-database-url
 psycopg[binary]
 crispy-bootstrap5
+Pillow
