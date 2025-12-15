@@ -1,13 +1,16 @@
-# apps/katalog/models.py
+# apps/create/models.py
 
 from django.db import models
+from django.contrib.auth.models import User
 
 class Product(models.Model):
+    # Pilihan kategori utama
     CATEGORY_CHOICES = [
         ('Organik', 'Organik'),
         ('Anorganik', 'Anorganik'),
     ]
 
+    # Pilihan subkategori
     SUBCATEGORY_CHOICES = [
         ('Plastik', 'Plastik'),
         ('Kertas', 'Kertas'),
@@ -32,6 +35,7 @@ class Product(models.Model):
         ('Bunga Layu', 'Bunga Layu'),
     ]
 
+    # Fields utama
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='products/')
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
@@ -40,4 +44,14 @@ class Product(models.Model):
     product_type = models.CharField(max_length=100)
     difficulty = models.CharField(max_length=20)
     cara_pembuatan = models.TextField()
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    
+    # Relasi ke user
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
+
+    # Timestamp (opsional tapi sering berguna)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # String representation
+    def __str__(self):
+        return f"{self.title} ({self.category} - {self.subcategory})"
